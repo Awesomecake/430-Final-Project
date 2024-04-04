@@ -48,7 +48,7 @@ const LoginWindow = (props) => {
     return (
         <form id="loginForm"
             name="loginForm"
-            obSubmit={handleLogin}
+            onSubmit={handleLogin}
             action='/login'
             method='POST'
             className='mainForm'
@@ -88,7 +88,7 @@ const init = () => {
 
     const root = createRoot(document.getElementById('content'));
 
-    loginButton.addEventListener('click', (e)=>{
+    loginButton.addEventListener('click', (e) => {
         e.preventDefault();
         root.render(<LoginWindow/>);
         return false;
