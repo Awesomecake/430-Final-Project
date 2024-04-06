@@ -10,10 +10,10 @@ const handleDomo = (e, onDomoAdded) => {
     const name = e.target.querySelector('#domoName').value;
     const age = e.target.querySelector('#domoAge').value;
     const level = e.target.querySelector('#domoLevel').value
-    
-    if (!name || !age || !level) {
-        return false;
-    }
+
+    //This content check blocks the page from displaying an error response from the server
+    //I have commented it out so that we get the Domo displaying the error message on the page
+    //if (!name || !age || !level) {return false;}
 
     helper.sendPost(e.target.action, { name, age, level }, onDomoAdded);
 

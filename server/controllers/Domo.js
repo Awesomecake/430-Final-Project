@@ -5,6 +5,8 @@ const { Domo } = models;
 const makerPage = async (req, res) => res.render('app');
 
 const makeDomo = async (req, res) => {
+  console.log(req.body);
+
   if (!req.body.name || !req.body.age || !req.body.level) {
     return res.status(400).json({ error: 'Name, age and level are required.' });
   }

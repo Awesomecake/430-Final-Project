@@ -212,6 +212,7 @@ nav:nth-child(1) {
     padding: 10px;
     min-height:60px;
     overflow: hidden;
+    position: relative;
 }
 
 .domo:hover {
@@ -219,6 +220,17 @@ nav:nth-child(1) {
     border-color: rgba(255,255,255, 0.8);
     transition: background-color 2.6s ease-out;
     background-color: #66bfff;
+}
+
+.domo button{
+    transition: background-color 0.4s ease;
+    background-color: #55acee;
+    border-radius: 2px;
+    color: white;
+    text-decoration: none;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }
 
 img.domoFace {
