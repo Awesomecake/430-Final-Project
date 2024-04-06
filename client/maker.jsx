@@ -61,12 +61,15 @@ const DomoList = (props) => {
     }
 
     const domoNodes = domos.map((domo) => {
+        const id = domo._id;
+
         return (
             <div key={domo._id} className="domo">
                 <img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace'/>
                 <h3 className="domoName">Name: {domo.name}</h3>
                 <h3 className="domoAge">Age: {domo.age}</h3>
                 <h3 className="domoLevel">Level: {domo.level}</h3>
+                <button className="deleteDomo" onClick={() => helper.sendDelete(`/deleteDomo`, {id}, props.triggerReload)}>Delete</button>
             </div>
         );
     });
@@ -87,7 +90,7 @@ const App = () => {
                 <DomoForm triggerReload={() => setReloadDomos(!reloadDomos)} />
             </div>
             <div id='domos'>
-                <DomoList domos={[]} reloadDomos={reloadDomos} />
+                <DomoList domos={[]} reloadDomos={reloadDomos} triggerReload={() => setReloadDomos(!reloadDomos)}/>
             </div>
         </div>
     );

@@ -2,9 +2,7 @@ const models = require('../models');
 
 const { Domo } = models;
 
-const makerPage = async (req, res) => {
-  return res.render('app');
-};
+const makerPage = async (req, res) => res.render('app');
 
 const makeDomo = async (req, res) => {
   if (!req.body.name || !req.body.age || !req.body.level) {
@@ -21,7 +19,7 @@ const makeDomo = async (req, res) => {
   try {
     const newDomo = new Domo(domoData);
     await newDomo.save();
-    return res.status(201).json({ name: newDomo.name, age: newDomo.age, level: newDomo.level});
+    return res.status(201).json({ name: newDomo.name, age: newDomo.age, level: newDomo.level });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {
@@ -32,7 +30,7 @@ const makeDomo = async (req, res) => {
 };
 
 const getDomos = async (req, res) => {
-  try{
+  try {
     const query = { owner: req.session.account._id };
     const docs = await Domo.find(query).select('name age level').lean().exec();
 
@@ -41,10 +39,25 @@ const getDomos = async (req, res) => {
     console.log(err);
     return res.status(500).json({ error: 'Error retrieving domos!' });
   }
-}
+};
+
+const deleteDomo = async (req, res) => {
+  if (!req.body.id) {
+    return res.status(400).json({ error: 'An ID is required to delete a domo!' });
+  }
+
+  try {
+    await Domo.deleteOne({ _id: req.body.id });
+    return res.status(200).json({ message: 'Domo deleted!' });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ error: 'Error deleting domo!' });
+  }
+};
 
 module.exports = {
   makerPage,
   getDomos,
   makeDomo,
+  deleteDomo,
 };
