@@ -1,6 +1,6 @@
 /* Takes in an error message. Sets the error message up in html, and
    displays it to the user. Will be hidden by other events that could
-   end in an error.*/
+   end in an error.*/ 
 const handleError = (message) => {
     document.getElementById('errorMessage').textContent = message;
     document.getElementById('domoMessage').classList.remove('hidden');
