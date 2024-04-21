@@ -3,94 +3,123 @@ const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
 
-const handleDomo = (e, onDomoAdded) => {
-    e.preventDefault();
+const handleMessage = (action, onMessageAdded) => {
+    // e.preventDefault();
     helper.hideError();
 
-    const name = e.target.querySelector('#domoName').value;
-    const age = e.target.querySelector('#domoAge').value;
-    const level = e.target.querySelector('#domoLevel').value
+    const channel = document.querySelector('#channelForm input[name="channel"]:checked').value;
+    const message = document.querySelector('span').textContent;
 
-    //This content check blocks the page from displaying an error response from the server
-    //I have commented it out so that we get the Domo displaying the error message on the page
-    //if (!name || !age || !level) {return false;}
+    helper.sendPost(action, { channel, message }, onMessageAdded);
 
-    helper.sendPost(e.target.action, { name, age, level }, onDomoAdded);
+    document.querySelector('span').textContent = '';
 
     return false;
 }
 
-const DomoForm = (props) => {
+const MessageForm = (props) => {
     return (
-        <form id="domoForm"
-            onSubmit={(e) => handleDomo(e, props.triggerReload)}
-            name='domoForm'
+        <form id="messageForm"
+            onSubmit={(e) => handleMessage(e.target.action, props.triggerReload)}
+            name='messageForm'
             action="/maker"
             method="POST"
-            className='domoForm'
+            className='messageForm'
+            onKeyDown={(e) => { if (e.keyCode == 13 && !e.shiftKey) { handleMessage(e.target.parentElement.action, props.triggerReload); e.preventDefault();} }}
         >
-            <label htmlFor="name">Name: </label>
-            <input id="domoName" type="text" name="name" placeholder="Domo Name" />
-            <label htmlFor="age">Age: </label>
-            <input id="domoAge" type="number" name="age" min="0" />
-            <label htmlFor="level">Level: </label>
-            <input id="domoLevel" type="number" name="level" min="0" />
-            <input className="makeDomoSubmit" type="submit" value="Make Domo" />
+            <span class="textarea" role="textbox" contenteditable="true"></span>
         </form>
     );
 }
 
-const DomoList = (props) => {
-    const [domos, setDomos] = useState(props.domos);
+const MessageList = (props) => {
+    const [messages, setMessages] = useState(props.messages);
 
     useEffect(() => {
-        const loadDomosFromServer = async () => {
-            const response = await fetch('/getDomos');
+        const loadMessagesFromServer = async (newChannel) => {
+            const response = await fetch(`/getMessages?channel=${newChannel}`);
             const data = await response.json();
-            setDomos(data.domos);
+            setMessages(data.messages);
+            return newChannel;
         };
-        loadDomosFromServer();
-    }, [props.reloadDomos]);
 
-    if(domos.length === 0) {
+        const loadChannelFromServer = async () => {
+            await fetch('/getAccountChannel')
+                .then(response => response.json())
+                .then((responseJson) => {
+                    let currentChannel = document.querySelector(`#channelForm input[value="${responseJson.channel}"]`);
+                    currentChannel.checked = true;
+                    document.querySelector('#displayChannelHeader').innerHTML = `<h1>Current Channel: ${currentChannel.id}</h1>`;
+                    return responseJson.channel;
+                })
+                .then((newChannel) => loadMessagesFromServer(newChannel))
+        }
+
+        loadChannelFromServer();
+    }, [props.reloadMessages]);
+
+    if (messages.length === 0) {
         return (
-            <div className="domoList">
-                <h3 className="emptyDomo">No Domos Yet!</h3>
+            <div className="messageList">
+                <h3 className="emptyMessage">No Messages Yet!</h3>
             </div>
         );
     }
 
-    const domoNodes = domos.map((domo) => {
-        const id = domo._id;
+    const messageNodes = messages.map((message) => {
+        const id = message._id;
 
         return (
-            <div key={domo._id} className="domo">
-                <img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace'/>
-                <h3 className="domoName">Name: {domo.name}</h3>
-                <h3 className="domoAge">Age: {domo.age}</h3>
-                <h3 className="domoLevel">Level: {domo.level}</h3>
-                <button className="deleteDomo" onClick={() => helper.sendDelete(`/deleteDomo`, {id}, props.triggerReload)}>Delete</button>
+            <div key={message._id} className="message">
+                <h3 className="messageMessage">Message message: {message.message}</h3>
+                <button className="deleteMessage" onClick={() => helper.sendDelete(`/deleteMessage`, { id }, props.triggerReload)}>Delete</button>
             </div>
         );
     });
 
     return (
-        <div className="domoList">
-            {domoNodes}
+        <div className="messageList">
+            {messageNodes}
         </div>
     );
 }
 
-const App = () => {
-    const [reloadDomos, setReloadDomos] = useState(false);
+const ChannelForm = (props) => {
+    const updateChannel = (e) => {
+        helper.sendPost(e.target.form.action, { channel: e.target.value }, props.triggerReload);
+    }
 
     return (
-        <div>
-            <div id='makeDomo'>
-                <DomoForm triggerReload={() => setReloadDomos(!reloadDomos)} />
+        <form id="channelForm" name="channelForm" action="/setAccountChannel" method="POST">
+            <input type="radio" id="general" name="channel" value="1" onClick={updateChannel} />
+            <label htmlFor="general">General</label>
+            <input type="radio" id="random" name="channel" value="2" onClick={updateChannel} />
+            <label htmlFor="random">Random</label>
+            <input type="radio" id="other" name="channel" value="3" onClick={updateChannel} />
+            <label htmlFor="other">Other</label>
+        </form>
+    );
+};
+
+const App = () => {
+    const [reloadMessages, setReloadMessages] = useState(false);
+
+    return (
+        <div id="content">
+            <div id="channelSelect">
+                <h1>Channels</h1>
+                <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
             </div>
-            <div id='domos'>
-                <DomoList domos={[]} reloadDomos={reloadDomos} triggerReload={() => setReloadDomos(!reloadDomos)}/>
+            <div id="contentMessages">
+                <div id="displayChannelHeader">
+                    <h1>Current Channel</h1>
+                </div>
+                <div id='messages'>
+                    <MessageList channel={""} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} />
+                </div>
+                <div id='makeMessage'>
+                    <MessageForm triggerReload={() => setReloadMessages(!reloadMessages)} />
+                </div>
             </div>
         </div>
     );

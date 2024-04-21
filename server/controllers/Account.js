@@ -56,9 +56,40 @@ const signup = async (req, res) => {
   }
 };
 
+const setAccountChannel = async (req, res) => {
+  if (!req.body.channel) {
+    return res.status(400).json({ error: 'Channel required' });
+  }
+
+  try {
+    const query = { _id: req.session.account._id};
+    const account = await Account.find(query)
+
+    account[0].channel = req.body.channel;
+    await account[0].save();
+    return res.status(202).json({ channel: req.body.channel });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred.' });
+  }
+};
+
+const getAccountChannel = async (req, res) => {
+  try {
+    const query = { _id: req.session.account._id};
+    const account = await Account.find(query)
+    return res.status(200).json({ channel: account[0].channel });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred.' });
+  }
+}
+
 module.exports = {
   loginPage,
   login,
   logout,
   signup,
+  setAccountChannel,
+  getAccountChannel
 };

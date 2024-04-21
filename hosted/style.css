@@ -1,16 +1,63 @@
-html, body {
+html,
+body {
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    overflow: hidden;
 }
+
+#app {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#content {
+    width: 80%;
+    flex-grow: 3;
+    margin: 50 auto 0 auto;
+    background-color: #424549;
+    display: flex;
+}
+
+#contentMessages {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 3;
+    justify-content: space-between;
+}
+
+/* Scrollbar Styling */
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* NavBar Styling */
 
 #logo {
     height: 40px;
     width: 40;
     padding-top: 5px;
-    float:left;
+    float: left;
     border-radius: 8px;
 }
 
@@ -18,6 +65,9 @@ nav {
     width: 100%;
     height: 50px;
     background-color: #55acee;
+    position: absolute;
+    z-index: 100;
+    box-shadow: 0px 0px 0px 2px black;
 }
 
 nav:nth-child(1) {
@@ -33,7 +83,11 @@ nav:nth-child(1) {
     float: left;
 }
 
-.navlink a, .navlink a:link, .navlink a:visited, .navlink a:hover, .navlink a:active {
+.navlink a,
+.navlink a:link,
+.navlink a:visited,
+.navlink a:hover,
+.navlink a:active {
     color: white;
     text-decoration: none;
     padding: 5px;
@@ -47,48 +101,59 @@ nav:nth-child(1) {
     background-color: #66bdff;
 }
 
-.domoForm {
-    border: 2px solid #338acc;
-    height: 35px;
-    width: 900px;
-    margin-top:0px;
-    padding-top:10px;
-    background-color: #55acee;
+/* Message Submission Form Styling */
+
+.messageForm {
+    width: 100%;
+    min-height: 35px;
+    padding: 10px 0px;
+    height: max-content;
+    background-color: #424549;
+
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
+    margin-block-end: 0px;
 }
 
-.domoForm label {
-    display: inline-block;
-    width: 75px;
+.textarea {
+    width: 90%;
+    min-height: 25px;
+    max-height: 300px;
+
     margin-left: 10px;
-    font-size: 1.2em;
-    float: left;
+    padding: 5px;
+    background-color: #55585b;
+    resize: none;
+    display: block;
+    overflow: hidden;
+    line-height: 20px;
+    font-size: large;
+    border-radius: 7.5px;
+    color:white
+}
+
+.textarea:empty::before {
+    content: "Placeholder still possible";
+    color: lightgray;
+}
+
+/* Current Channel Header Styling */
+
+#displayChannelHeader {
+    background-color: blueviolet;
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+#displayChannelHeader h1 {
+    text-transform: capitalize;
     color: white;
+    font-size: 2em;
+    margin-left: 10px;
 }
 
-.domoForm input{
-    float:left;
-}
-
-.makeDomoSubmit {
-    transition: background-color 0.4s ease;
-    display: inline;
-    width: 90px;
-    background-color: #55acee;
-    border-radius: 2px;
-    color: white;
-    text-decoration: none;
-}
-
-.makeDomoSubmit:link, .makeDomoSubmit:visited, .makeDomoSubmit:hover, .makeDomoSubmit:active {
-    color: white;
-}
-
-.makeDomoSubmit:hover {
-    transition: background-color 0.4s ease;
-    background-color: #338acc;
-}
+/* Login and Signup Form Styling */
 
 .mainForm {
     height: 300px;
@@ -126,7 +191,10 @@ nav:nth-child(1) {
     text-decoration: none;
 }
 
-.formSubmit:link, .formSubmit:visited, .formSubmit:hover, .formSubmit:active {
+.formSubmit:link,
+.formSubmit:visited,
+.formSubmit:hover,
+.formSubmit:active {
     color: white;
 }
 
@@ -135,14 +203,18 @@ nav:nth-child(1) {
     background-color: #338acc;
 }
 
-#user, #pass, #pass2 {
+#user,
+#pass,
+#pass2 {
     text-align: center;
     font-size: 1.1em;
     width: 180px;
     border-radius: 6px;
 }
 
-#user:focus, #pass:focus, #pass2:focus {
+#user:focus,
+#pass:focus,
+#pass2:focus {
     outline: none;
     box-shadow: 0px 0px 1px 1px #55acee;
 }
@@ -171,7 +243,7 @@ nav:nth-child(1) {
 #speech {
     height: 120px;
     width: 250px;
-    z-index:300;
+    z-index: 300;
 }
 
 #errorMessage {
@@ -181,27 +253,27 @@ nav:nth-child(1) {
     font-style: italic;
 }
 
-#domo {
+#message {
     z-index: 225;
     margin-top: -20px;
     margin-left: 135px;
     height: 450px;
     width: 300px;
     -ms-transform: rotate(330deg);
-    -webkit-transform: rotate(330deg); 
+    -webkit-transform: rotate(330deg);
     transform: rotate(330deg);
 }
 
-#domos {
-    width: 40%;
-    min-width: 400px;
-    border: 2px solid #55acee;
+/* List of Messages Styling */
+#messages {
+    width: 100%;
+    height: 300px;
     border-radius: 4px;
-    margin: 0 auto;
-    margin-top: 100px;
+    overflow-y: auto;
+    flex-grow: 3;
 }
 
-.domo {
+.message {
     width: 95%;
     margin: 0 auto;
     margin-top: 2px;
@@ -210,19 +282,18 @@ nav:nth-child(1) {
     border-radius: 4px;
     background-color: #55acee;
     padding: 10px;
-    min-height:60px;
     overflow: hidden;
     position: relative;
 }
 
-.domo:hover {
+.message:hover {
     transition: border-color 0.2s ease-out;
-    border-color: rgba(255,255,255, 0.8);
+    border-color: rgba(255, 255, 255, 0.8);
     transition: background-color 2.6s ease-out;
     background-color: #66bfff;
 }
 
-.domo button{
+.message button {
     transition: background-color 0.4s ease;
     background-color: #55acee;
     border-radius: 2px;
@@ -233,17 +304,14 @@ nav:nth-child(1) {
     right: 5px;
 }
 
-img.domoFace {
-    margin-left: 25px;
-    margin-right: 10px;
-    height: 50px;
-    width: 50px;
-    border-radius: 4px;
-    margin-top:10px;
-    float:left;
+.message h3 {
+    color: white;
+    font-size: 1.2em;
+    margin: 0px;
+    padding: 0px;
 }
 
-h3.emptyDomo {
+h3.emptyMessage {
     width: 400px;
     font-size: 1.5em;
     margin: 0 auto;
@@ -251,36 +319,34 @@ h3.emptyDomo {
     margin-top: 18px;
 }
 
-h3.domoName {
-    float:left;
-    width: 200px;
-    font-weight: bold;
-    padding-left: 65px;
-    font-size: 1.5em;
+/* Channel Selection Styling */
+
+#channelSelect {
+    float: left;
+    width: min-content;
+    margin: 0px;
+    padding: 25px;
+    height: 100%;
+    font-size: 1.2em;
+    background-color: red;
+    top: 50px;
+    bottom: 0px;
 }
 
-h3.domoAge {
-    float:right;
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
+#channelSelect label {
+    display: block;
+    margin: 0px;
+    padding: 0px;
+    font-size: 1.2em;
 }
 
-h3.domoLevel {
-    float:right;
-    text-align: left;
-    width: 100px;
-    font-weight: bold;
-    padding-right: 40px;
-    font-size: 1.5em;
+#channelSelect input[type=radio]:checked+label {
+    color: white;
+    font-style: normal;
 }
 
-.domo:first-child {
-    margin-top: 10px;
-}
-
-.domo:last-child {
-    margin-bottom:10px;
+#channelSelect input {
+    position: fixed;
+    opacity: 0;
+    pointer-events: none;
 }
