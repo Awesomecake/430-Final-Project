@@ -15,31 +15,29 @@ const handleMessage = (action, onMessageAdded) => {
     helper.sendPost(action, { channel, message }, onMessageAdded);
 
     document.querySelector('.textarea').value = '';
+    document.querySelector('.textarea').rows = '1';
 
     return false;
 }
 
 const MessageForm = (props) => {
-    const [channel, setChannel] = useState(props.channel);
-
     // Dealing with Textarea Height
     function calcHeight(value) {
-        let numberOfLineBreaks = (value.match(/\n/g) || []).length;
-        // min-height + lines x line-height + padding + border
-        let newHeight = 20 + numberOfLineBreaks * 20 + 12 + 2;
-        return newHeight;
+        let numberOfLineBreaks = (value.match(/\n/g) || []).length + 1;
+        console.log(numberOfLineBreaks);
+        return numberOfLineBreaks.toString();
     }
 
     return (
-        <form id="messageForm"
+        <form id="messageForm" 
             onSubmit={(e) => handleMessage(e.target.action, props.triggerReload)}
             name='messageForm'
             action="/maker"
             method="POST"
-            className='messageForm'
+            class='messageForm'
             onKeyDown={(e) => { if (e.keyCode == 13 && !e.shiftKey) { handleMessage(e.target.parentElement.action, props.triggerReload); e.preventDefault(); } }}
         >
-            <textarea class="textarea" name="message" placeholder="Type your {} message here..." onKeyUp={(e) => e.target.style.height = calcHeight(e.target.value) + "px"}></textarea>
+            <textarea class="textarea has-fixed-size has-text-white" rows="1" name="message" placeholder="Type your {} message here..." onChange={(e) => e.target.rows = calcHeight(e.target.value)}></textarea>
             {/* <span class="textarea" role="textbox" contenteditable="true"></span> */}
         </form>
     );
@@ -88,7 +86,7 @@ const MessageList = (props) => {
         console.log(message.message);
 
         return (
-            <div key={message._id} className="message">
+            <div key={message._id} class="content message">
                 <Markdown remarkPlugins={[remarkGfm]} className="messageMessage">{message.message}</Markdown>
                 <button className="deleteMessage" onClick={() => helper.sendDelete(`/deleteMessage`, { id }, props.triggerReload)}>Delete</button>
             </div>
@@ -123,9 +121,9 @@ const App = () => {
     const [reloadMessages, setReloadMessages] = useState(false);
 
     return (
-        <div id="content">
+        <div id="mainAppContent">
             <div id="channelSelect">
-                <h1>Channels</h1>
+                <h1 class="is-size-3">Channels</h1>
                 <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
             </div>
             <div id="contentMessages">

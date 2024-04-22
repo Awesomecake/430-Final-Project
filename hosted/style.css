@@ -14,7 +14,7 @@ body {
     flex-direction: column;
 }
 
-#content {
+#mainAppContent {
     width: 80%;
     flex-grow: 3;
     margin: 50 auto 0 auto;
@@ -104,43 +104,26 @@ nav:nth-child(1) {
 /* Message Submission Form Styling */
 
 .messageForm {
-    width: 100%;
-    min-height: 35px;
-    padding: 10px 0px;
+    padding: 10px;
     height: max-content;
     background-color: #424549;
 
-    border-bottom-right-radius: 4px;
-    border-top-right-radius: 4px;
     margin-block-end: 0px;
 }
 
 .textarea {
-    width: 90%;
-    min-height: 25px;
     max-height: 300px;
-    height: 34px;
 
-    margin-left: 10px;
-    padding: 5px;
-    background-color: #55585b;
-    resize: none;
-    display: block;
-    overflow: hidden;
-    line-height: 20px;
-    font-size: large;
-    border-radius: 7.5px;
-    color:white;
+    background-color: #55585b !important;
+    border: none !important;
+
+    overflow-y: auto;
 }
 
-.textarea:empty::before {
-    content: "Placeholder still possible";
-    color: lightgray;
-}
-
-textarea{
-    font-family: inherit;
-}
+.textarea::placeholder {
+    color: rgb(197, 197, 197) !important;
+    opacity: 1; /* Firefox */
+  }
 
 /* Current Channel Header Styling */
 
@@ -271,6 +254,7 @@ textarea{
 
 /* List of Messages Styling */
 #messages {
+    padding-top: 10px;
     width: 100%;
     height: 300px;
     border-radius: 4px;
@@ -311,6 +295,7 @@ textarea{
 
 .message a {
     text-decoration: none;
+    color: blue !important;
 }
 
 .message a:hover {
