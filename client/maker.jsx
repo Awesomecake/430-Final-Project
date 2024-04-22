@@ -2,6 +2,8 @@ const helper = require('./helper.js');
 const React = require('react');
 const { useState, useEffect } = React;
 const { createRoot } = require('react-dom/client');
+import Markdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const handleMessage = (action, onMessageAdded) => {
     // e.preventDefault();
@@ -83,15 +85,11 @@ const MessageList = (props) => {
     const messageNodes = messages.map((message) => {
         const id = message._id;
 
-        let output = message.message.replace(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g, (x) => '<a href="' + x + '">' + x + '</a>');
-
-        // let output = message.message.replace(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g, 
-        //     (x) => 
-        //         `<iframe src='` + x + `' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen title='video' />`);
+        console.log(message.message);
 
         return (
             <div key={message._id} className="message">
-                <h3 className="messageMessage" dangerouslySetInnerHTML={{__html: output}}></h3>
+                <Markdown remarkPlugins={[remarkGfm]} className="messageMessage">{message.message}</Markdown>
                 <button className="deleteMessage" onClick={() => helper.sendDelete(`/deleteMessage`, { id }, props.triggerReload)}>Delete</button>
             </div>
         );

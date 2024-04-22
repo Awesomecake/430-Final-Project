@@ -44,7 +44,9 @@
     "express-session": "^1.18.0",
     "helmet": "^7.1.0",
     "mongoose": "^8.2.3",
+    "react-markdown": "^9.0.1",
     "redis": "^4.6.13",
+    "remark-gfm": "^4.0.0",
     "serve-favicon": "^2.5.0",
     "underscore": "^1.13.6"
   }

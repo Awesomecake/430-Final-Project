@@ -317,12 +317,9 @@ textarea{
     text-decoration: underline;
 }
 
-.message h3 {
-    color: white;
-    font-size: 1.2em;
+.message .messageMessage {
     margin: 0px;
     padding: 0px;
-    white-space: break-spaces;
 }
 
 h3.emptyMessage {
