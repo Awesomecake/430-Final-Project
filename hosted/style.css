@@ -119,6 +119,7 @@ nav:nth-child(1) {
     width: 90%;
     min-height: 25px;
     max-height: 300px;
+    height: 34px;
 
     margin-left: 10px;
     padding: 5px;
@@ -129,12 +130,16 @@ nav:nth-child(1) {
     line-height: 20px;
     font-size: large;
     border-radius: 7.5px;
-    color:white
+    color:white;
 }
 
 .textarea:empty::before {
     content: "Placeholder still possible";
     color: lightgray;
+}
+
+textarea{
+    font-family: inherit;
 }
 
 /* Current Channel Header Styling */
@@ -304,11 +309,20 @@ nav:nth-child(1) {
     right: 5px;
 }
 
+.message a {
+    text-decoration: none;
+}
+
+.message a:hover {
+    text-decoration: underline;
+}
+
 .message h3 {
     color: white;
     font-size: 1.2em;
     margin: 0px;
     padding: 0px;
+    white-space: break-spaces;
 }
 
 h3.emptyMessage {

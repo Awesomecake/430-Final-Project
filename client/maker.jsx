@@ -8,16 +8,26 @@ const handleMessage = (action, onMessageAdded) => {
     helper.hideError();
 
     const channel = document.querySelector('#channelForm input[name="channel"]:checked').value;
-    const message = document.querySelector('span').textContent;
+    const message = document.querySelector('.textarea').value;
 
     helper.sendPost(action, { channel, message }, onMessageAdded);
 
-    document.querySelector('span').textContent = '';
+    document.querySelector('.textarea').value = '';
 
     return false;
 }
 
 const MessageForm = (props) => {
+    const [channel, setChannel] = useState(props.channel);
+
+    // Dealing with Textarea Height
+    function calcHeight(value) {
+        let numberOfLineBreaks = (value.match(/\n/g) || []).length;
+        // min-height + lines x line-height + padding + border
+        let newHeight = 20 + numberOfLineBreaks * 20 + 12 + 2;
+        return newHeight;
+    }
+
     return (
         <form id="messageForm"
             onSubmit={(e) => handleMessage(e.target.action, props.triggerReload)}
@@ -25,15 +35,17 @@ const MessageForm = (props) => {
             action="/maker"
             method="POST"
             className='messageForm'
-            onKeyDown={(e) => { if (e.keyCode == 13 && !e.shiftKey) { handleMessage(e.target.parentElement.action, props.triggerReload); e.preventDefault();} }}
+            onKeyDown={(e) => { if (e.keyCode == 13 && !e.shiftKey) { handleMessage(e.target.parentElement.action, props.triggerReload); e.preventDefault(); } }}
         >
-            <span class="textarea" role="textbox" contenteditable="true"></span>
+            <textarea class="textarea" name="message" placeholder="Type your {} message here..." onKeyUp={(e) => e.target.style.height = calcHeight(e.target.value) + "px"}></textarea>
+            {/* <span class="textarea" role="textbox" contenteditable="true"></span> */}
         </form>
     );
 }
 
 const MessageList = (props) => {
     const [messages, setMessages] = useState(props.messages);
+    const [channel, setChannel] = useState(props.channel);
 
     useEffect(() => {
         const loadMessagesFromServer = async (newChannel) => {
@@ -47,9 +59,11 @@ const MessageList = (props) => {
             await fetch('/getAccountChannel')
                 .then(response => response.json())
                 .then((responseJson) => {
+                    setChannel(responseJson.channel);
                     let currentChannel = document.querySelector(`#channelForm input[value="${responseJson.channel}"]`);
                     currentChannel.checked = true;
                     document.querySelector('#displayChannelHeader').innerHTML = `<h1>Current Channel: ${currentChannel.id}</h1>`;
+                    document.querySelector('textarea').placeholder = `Type your ${currentChannel.id} message here...`;
                     return responseJson.channel;
                 })
                 .then((newChannel) => loadMessagesFromServer(newChannel))
@@ -69,9 +83,15 @@ const MessageList = (props) => {
     const messageNodes = messages.map((message) => {
         const id = message._id;
 
+        let output = message.message.replace(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g, (x) => '<a href="' + x + '">' + x + '</a>');
+
+        // let output = message.message.replace(/(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*))/g, 
+        //     (x) => 
+        //         `<iframe src='` + x + `' frameborder='0' allow='autoplay; encrypted-media' allowfullscreen title='video' />`);
+
         return (
             <div key={message._id} className="message">
-                <h3 className="messageMessage">Message message: {message.message}</h3>
+                <h3 className="messageMessage" dangerouslySetInnerHTML={{__html: output}}></h3>
                 <button className="deleteMessage" onClick={() => helper.sendDelete(`/deleteMessage`, { id }, props.triggerReload)}>Delete</button>
             </div>
         );
@@ -115,7 +135,7 @@ const App = () => {
                     <h1>Current Channel</h1>
                 </div>
                 <div id='messages'>
-                    <MessageList channel={""} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} />
+                    <MessageList channel={"1"} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} />
                 </div>
                 <div id='makeMessage'>
                     <MessageForm triggerReload={() => setReloadMessages(!reloadMessages)} />
