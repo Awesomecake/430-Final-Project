@@ -5,7 +5,6 @@ const router = (app) => {
   app.get('/getMessages', mid.requiresLogin, controllers.Message.getMessages);
   app.delete('/deleteMessage', mid.requiresLogin, controllers.Message.deleteMessage);
   app.post('/setAccountChannel', mid.requiresLogin, controllers.Account.setAccountChannel);
-  app.get('/getAccountChannel', mid.requiresLogin, controllers.Account.getAccountChannel);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);

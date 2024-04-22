@@ -54,8 +54,8 @@ body {
 /* NavBar Styling */
 
 #logo {
-    height: 40px;
-    width: 40;
+    height: auto;
+    width: 40px;
     padding-top: 5px;
     float: left;
     border-radius: 8px;
@@ -267,30 +267,24 @@ nav:nth-child(1) {
     margin: 0 auto;
     margin-top: 2px;
     margin-bottom: 2px;
-    border: 2px solid #55acee;
     border-radius: 4px;
-    background-color: #55acee;
     padding: 10px;
     overflow: hidden;
     position: relative;
 }
 
 .message:hover {
-    transition: border-color 0.2s ease-out;
-    border-color: rgba(255, 255, 255, 0.8);
-    transition: background-color 2.6s ease-out;
-    background-color: #66bfff;
+    background-color: lightgray;
 }
 
 .message button {
-    transition: background-color 0.4s ease;
-    background-color: #55acee;
-    border-radius: 2px;
-    color: white;
-    text-decoration: none;
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 10px;
+    right: 10px;
+}
+
+.message p{
+    white-space: preserve nowrap;
 }
 
 .message a {
@@ -313,6 +307,7 @@ h3.emptyMessage {
     margin: 0 auto;
     text-align: center;
     margin-top: 18px;
+    color: white
 }
 
 /* Channel Selection Styling */

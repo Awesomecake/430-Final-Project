@@ -31,14 +31,10 @@ const makeMessage = async (req, res) => {
 
 const getMessages = async (req, res) => {
   try {
-    if (!req.query.channel) {
-      return res.status(400).json({ error: 'Channel is required to retrieve messages!' });
-    }
-
-    const query = { owner: req.session.account._id, channel: req.query.channel};
+    const query = { owner: req.session.account._id, channel: req.session.account.channel};
     const docs = await Message.find(query).select('channel message').lean().exec();
 
-    return res.json({ messages: docs });
+    return res.json({ messages: docs, channel: req.session.account.channel });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Error retrieving messages!' });

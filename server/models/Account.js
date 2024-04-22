@@ -48,6 +48,7 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   _id: doc._id,
+  channel: doc.channel
 });
 
 // Helper function to hash a password

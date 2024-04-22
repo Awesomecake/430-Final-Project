@@ -29,7 +29,7 @@ const MessageForm = (props) => {
     }
 
     return (
-        <form id="messageForm" 
+        <form id="messageForm"
             onSubmit={(e) => handleMessage(e.target.action, props.triggerReload)}
             name='messageForm'
             action="/maker"
@@ -45,31 +45,21 @@ const MessageForm = (props) => {
 
 const MessageList = (props) => {
     const [messages, setMessages] = useState(props.messages);
-    const [channel, setChannel] = useState(props.channel);
 
     useEffect(() => {
-        const loadMessagesFromServer = async (newChannel) => {
-            const response = await fetch(`/getMessages?channel=${newChannel}`);
-            const data = await response.json();
-            setMessages(data.messages);
-            return newChannel;
+        const loadMessagesFromServer = async () => {
+            const response = await fetch(`/getMessages`);
+            const data = await response.json().then((e) => {
+                console.log(e);
+                let currentChannel = document.querySelector(`#channelForm input[value="${e.channel}"]`);
+                currentChannel.checked = true;
+                document.querySelector('#displayChannelHeader').innerHTML = `<h1>Current Channel: ${currentChannel.id}</h1>`;
+                document.querySelector('textarea').placeholder = `Type your ${currentChannel.id} message here...`;
+                setMessages(e.messages);
+            });
         };
 
-        const loadChannelFromServer = async () => {
-            await fetch('/getAccountChannel')
-                .then(response => response.json())
-                .then((responseJson) => {
-                    setChannel(responseJson.channel);
-                    let currentChannel = document.querySelector(`#channelForm input[value="${responseJson.channel}"]`);
-                    currentChannel.checked = true;
-                    document.querySelector('#displayChannelHeader').innerHTML = `<h1>Current Channel: ${currentChannel.id}</h1>`;
-                    document.querySelector('textarea').placeholder = `Type your ${currentChannel.id} message here...`;
-                    return responseJson.channel;
-                })
-                .then((newChannel) => loadMessagesFromServer(newChannel))
-        }
-
-        loadChannelFromServer();
+        loadMessagesFromServer();
     }, [props.reloadMessages]);
 
     if (messages.length === 0) {
@@ -87,7 +77,7 @@ const MessageList = (props) => {
 
         return (
             <div key={message._id} class="content message">
-                <Markdown remarkPlugins={[remarkGfm]} className="messageMessage">{message.message}</Markdown>
+                <Markdown remarkPlugins={[remarkGfm]} class="messageMessage">{message.message}</Markdown>
                 <button className="deleteMessage" onClick={() => helper.sendDelete(`/deleteMessage`, { id }, props.triggerReload)}>Delete</button>
             </div>
         );
