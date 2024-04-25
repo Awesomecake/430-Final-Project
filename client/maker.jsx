@@ -24,7 +24,6 @@ const MessageForm = (props) => {
     // Dealing with Textarea Height
     function calcHeight(value) {
         let numberOfLineBreaks = (value.match(/\n/g) || []).length + 1;
-        console.log(numberOfLineBreaks);
         return numberOfLineBreaks.toString();
     }
 
@@ -49,7 +48,6 @@ const MessageList = (props) => {
         const loadMessagesFromServer = async () => {
             const response = await fetch(`/getMessages`);
             const data = await response.json().then((e) => {
-                console.log(e);
                 let currentChannel = document.querySelector(`#channelForm input[value="${e.channel}"]`);
                 currentChannel.checked = true;
                 document.querySelector('#displayChannelHeader').innerHTML = `<h1>Current Channel: ${currentChannel.id}</h1>`;
@@ -71,8 +69,6 @@ const MessageList = (props) => {
 
     const messageNodes = messages.map((message) => {
         const id = message._id;
-
-        console.log(message.message);
 
         return (
             <div key={message._id} class="content message">
@@ -116,7 +112,6 @@ const ChangePasswordForm = (props) => {
         helper.sendPost(e.target.action, { pass, pass2 }, (response) => {
             document.querySelector('#pass').value = '';
             document.querySelector('#pass2').value = '';
-            console.log(response);
         }, changePasswordServerResponse);
 
         return false;
@@ -125,7 +120,7 @@ const ChangePasswordForm = (props) => {
     return (
         <div id="changePasswordForm">
             <button id="closeChangePassword" onClick={() => document.querySelector('#blurBackground').style.display = 'none'}>X</button>
-            <form 
+            <form
                 id="changePSForm"
                 name="changePasswordForm"
                 onSubmit={handleChange}
@@ -140,7 +135,7 @@ const ChangePasswordForm = (props) => {
                 <input id="pass2" type="password" name="pass2" placeholder="retype password" />
                 <input className="formSubmit" type="submit" value="Change password" />
             </form>
-            <p id="changePasswordServerResponse"></p>            
+            <p id="changePasswordServerResponse"></p>
         </div>
 
     );
@@ -150,30 +145,44 @@ const App = () => {
     const [reloadMessages, setReloadMessages] = useState(false);
 
     return (
-        <div id="mainAppContent">
-            <div id="channelSelect">
-                <div>
-                    <h1 class="is-size-3">Channels</h1>
-                    <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
+        <div id="app">
+            <div id="leftAds">
+                <h1>Ads</h1>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <div id="mainAppContent">
+                <div id="channelSelect">
+                    <div>
+                        <h1 class="is-size-3">Channels</h1>
+                        <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
+                    </div>
+                    <div>
+                        <button id="changePassword" onClick={() => document.querySelector('#blurBackground').style.display = 'block'}>Change Password</button>
+                        <div class="navlink"><a href="/logout">Log out</a></div>
+                    </div>
                 </div>
-                <div>
-                    <button id="changePassword" onClick={() => document.querySelector('#blurBackground').style.display = 'block'}>Change Password</button>
-                    <div class="navlink"><a href="/logout">Log out</a></div>
+                <div id="contentMessages">
+                    <div id="displayChannelHeader">
+                        <h1>Current Channel</h1>
+                    </div>
+                    <div id='messages'>
+                        <MessageList channel={"1"} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} />
+                    </div>
+                    <div id='makeMessage'>
+                        <MessageForm triggerReload={() => setReloadMessages(!reloadMessages)} />
+                    </div>
+                    <div id="blurBackground">
+                        <ChangePasswordForm></ChangePasswordForm>
+                    </div>
                 </div>
             </div>
-            <div id="contentMessages">
-                <div id="displayChannelHeader">
-                    <h1>Current Channel</h1>
-                </div>
-                <div id='messages'>
-                    <MessageList channel={"1"} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} />
-                </div>
-                <div id='makeMessage'>
-                    <MessageForm triggerReload={() => setReloadMessages(!reloadMessages)} />
-                </div>
-                <div id="blurBackground">
-                    <ChangePasswordForm></ChangePasswordForm>
-                </div>
+            <div id="rightAds">
+                <h1>Ads</h1>
+                <div></div>
+                <div></div>
+                <div></div>
             </div>
         </div>
     );

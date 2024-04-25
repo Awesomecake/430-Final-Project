@@ -9,27 +9,58 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
-    background-color: white;
+    background-color: var(--supporting-bg-color2);
 
     /* #424549 
     #55585b
     */
+    overflow-y: hidden;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: 0px;
 }
 
 #app {
     height: 100%;
     width: 100%;
     display: flex;
+    flex-direction: row;
+}
+
+#leftAds, #rightAds {
+    width: 10%;
+    display: flex;
     flex-direction: column;
+    align-items: center;
+}
+
+#leftAds h1, #rightAds h1{
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#leftAds div, #rightAds div{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    width: 80%;
+    height: 120px;
+    text-align: center;
+    background-color: red;
+    flex-shrink: 3;
 }
 
 #mainAppContent {
-    width: 80%;
     flex-grow: 3;
     margin: 0 auto;
     background-color: var(--supporting-bg-color);
     display: flex;
+}
+
+.content p, .content h1, .content h2{
+    margin: 10 !important;
 }
 
 #contentMessages {

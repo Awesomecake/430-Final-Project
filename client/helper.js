@@ -25,10 +25,10 @@ const sendPost = async (url, data, handler, outputTarget) => {
         window.location = result.redirect;
     }
 
-    if (result.error) {
+    if (result.error && outputTarget) {
         handleResponseMessage(outputTarget, result.error);
     }
-    else if (result.message) {
+    else if (result.message && outputTarget) {
         handleResponseMessage(outputTarget, result.message);
     }
 
