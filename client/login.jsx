@@ -1,6 +1,6 @@
 const helper = require('./helper.js');
 const React = require('react');
-const {createRoot} = require('react-dom/client');
+const { createRoot } = require('react-dom/client');
 
 const handleLogin = (e) => {
     e.preventDefault();
@@ -9,13 +9,12 @@ const handleLogin = (e) => {
     const username = e.target.querySelector('#user').value;
     const pass = e.target.querySelector('#pass').value;
 
-    if(!username || !pass)
-    {
-        helper.handleError('Username or password is empty!');
+    if (!username || !pass) {
+        helper.handleResponseMessage(document.querySelector("#loginOutput"), 'Username or password is empty!');
         return false;
     }
 
-    helper.sendPost(e.target.action, {username,pass});
+    helper.sendPost(e.target.action, { username, pass },{}, document.querySelector("#loginOutput"));
     return false;
 }
 
@@ -27,19 +26,17 @@ const handleSignup = (e) => {
     const pass = e.target.querySelector("#pass").value;
     const pass2 = e.target.querySelector("#pass2").value;
 
-    if(!username || !pass || !pass2)
-    {
-        helper.handleError('All fields are required!');
+    if (!username || !pass || !pass2) {
+        helper.handleResponseMessage(document.querySelector("#signupOutput"), 'All fields are required!');
         return false;
     }
 
-    if(pass !== pass2)
-    {
-        helper.handleError('Passwords do not match!');
+    if (pass !== pass2) {
+        helper.handleResponseMessage(document.querySelector("#signupOutput"), 'Passwords do not match!');
         return false;
     }
 
-    helper.sendPost(e.target.action, {username,pass,pass2});
+    helper.sendPost(e.target.action, { username, pass, pass2 });
 
     return false;
 }
@@ -53,11 +50,15 @@ const LoginWindow = (props) => {
             method='POST'
             className='mainForm'
         >
-            <label htmlFor='username'>Username: </label>
-            <input id='user' type='text' name='username' placeholder='username' />
-            <label htmlFor='pass'>Password: </label>
-            <input id='pass' type='password' name='pass' placeholder='password' />
-            <input className='formSubmit' type='submit' value="Sign in" />
+            <h1 class="is-size-1 has-text-centered">Login</h1>
+            <div>
+                <label htmlFor='username'>Username: </label>
+                <input id='user' type='text' name='username' placeholder='username' />
+                <label htmlFor='pass'>Password:</label>
+                <input id='pass' type='password' name='pass' placeholder='password' />
+            </div>
+            <input className='formSubmit' type='submit' value="Log In" />
+            <p id="loginOutput"></p>
         </form>
     );
 }
@@ -65,19 +66,25 @@ const LoginWindow = (props) => {
 const SignupWindow = (props) => {
     return (
         <form
+            id='signupForm'
             name='signupForm'
             onSubmit={handleSignup}
             action='/signup'
             method='POST'
             className='mainForm'
         >
-            <label htmlFor='username'>Username: </label>
-            <input id='user' type='text' name='username' placeholder='username'/>
-            <label htmlFor='pass'>Password: </label>
-            <input id='pass' type='password' name='pass' placeholder='password'/>
-            <label htmlFor='pass2'>Password: </label>
-            <input id='pass2' type='password' name='pass2' placeholder='retype password'/>
-            <input className='formSubmit' type='submit' value='Sign up'/>
+            <h1 class="is-size-1 has-text-centered">Sign Up</h1>
+
+            <div>
+                <label htmlFor='username'>Username: </label>
+                <input id='user' type='text' name='username' placeholder='username' />
+                <label htmlFor='pass'>Password: </label>
+                <input id='pass' type='password' name='pass' placeholder='password' />
+                <label htmlFor='pass2'>Password: </label>
+                <input id='pass2' type='password' name='pass2' placeholder='retype password' />
+            </div>
+            <input className='formSubmit' type='submit' value='Sign up' />
+            <p id="signupOutput"></p>
         </form>
     );
 }
@@ -90,17 +97,17 @@ const init = () => {
 
     loginButton.addEventListener('click', (e) => {
         e.preventDefault();
-        root.render(<LoginWindow/>);
+        root.render(<LoginWindow />);
         return false;
     });
 
     signupButton.addEventListener('click', (e) => {
         e.preventDefault();
-        root.render(<SignupWindow/>);
+        root.render(<SignupWindow />);
         return false;
     });
 
-    root.render(<LoginWindow/>);
+    root.render(<LoginWindow />);
 }
 
 window.onload = init;

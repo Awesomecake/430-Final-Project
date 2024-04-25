@@ -56,6 +56,30 @@ const signup = async (req, res) => {
   }
 };
 
+const changePassword = async (req, res) => {
+  const pass = `${req.body.pass}`;
+  const pass2 = `${req.body.pass2}`;
+
+  if (!pass || !pass2) {
+    return res.status(400).json({ error: 'All fields are required!' });
+  }
+
+  if (pass !== pass2) {
+    return res.status(400).json({ error: 'Passwords do not match!' });
+  }
+
+  try {
+    const account = await Account.find({ _id: req.session.account._id });
+    account[0].password = await Account.generateHash(pass);
+    await account[0].save();
+    return res.json({ message: 'Password changed!' });
+  }
+  catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred.' });
+  }
+};
+
 const setAccountChannel = async (req, res) => {
   if (!req.body.channel) {
     return res.status(400).json({ error: 'Channel required' });
@@ -82,4 +106,5 @@ module.exports = {
   logout,
   signup,
   setAccountChannel,
+  changePassword,
 };

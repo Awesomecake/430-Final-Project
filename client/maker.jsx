@@ -38,7 +38,6 @@ const MessageForm = (props) => {
             onKeyDown={(e) => { if (e.keyCode == 13 && !e.shiftKey) { handleMessage(e.target.parentElement.action, props.triggerReload); e.preventDefault(); } }}
         >
             <textarea class="textarea has-fixed-size has-text-white" rows="1" name="message" placeholder="Type your {} message here..." onChange={(e) => e.target.rows = calcHeight(e.target.value)}></textarea>
-            {/* <span class="textarea" role="textbox" contenteditable="true"></span> */}
         </form>
     );
 }
@@ -107,14 +106,60 @@ const ChannelForm = (props) => {
     );
 };
 
+const ChangePasswordForm = (props) => {
+    const handleChange = (e) => {
+        e.preventDefault();
+
+        const pass = document.querySelector('#pass').value;
+        const pass2 = document.querySelector('#pass2').value;
+
+        helper.sendPost(e.target.action, { pass, pass2 }, (response) => {
+            document.querySelector('#pass').value = '';
+            document.querySelector('#pass2').value = '';
+            console.log(response);
+        }, changePasswordServerResponse);
+
+        return false;
+    }
+
+    return (
+        <div id="changePasswordForm">
+            <button id="closeChangePassword" onClick={() => document.querySelector('#blurBackground').style.display = 'none'}>X</button>
+            <form 
+                id="changePSForm"
+                name="changePasswordForm"
+                onSubmit={handleChange}
+                action="/changePassword"
+                method="POST"
+            >
+
+                <h1 class="is-size-1 has-text-centered">Change Password</h1>
+                <label htmlFor="pass">Password: </label>
+                <input id="pass" type="password" name="pass" placeholder="password" />
+                <label htmlFor="pass2">Retype Password: </label>
+                <input id="pass2" type="password" name="pass2" placeholder="retype password" />
+                <input className="formSubmit" type="submit" value="Change password" />
+            </form>
+            <p id="changePasswordServerResponse"></p>            
+        </div>
+
+    );
+}
+
 const App = () => {
     const [reloadMessages, setReloadMessages] = useState(false);
 
     return (
         <div id="mainAppContent">
             <div id="channelSelect">
-                <h1 class="is-size-3">Channels</h1>
-                <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
+                <div>
+                    <h1 class="is-size-3">Channels</h1>
+                    <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
+                </div>
+                <div>
+                    <button id="changePassword" onClick={() => document.querySelector('#blurBackground').style.display = 'block'}>Change Password</button>
+                    <div class="navlink"><a href="/logout">Log out</a></div>
+                </div>
             </div>
             <div id="contentMessages">
                 <div id="displayChannelHeader">
@@ -125,6 +170,9 @@ const App = () => {
                 </div>
                 <div id='makeMessage'>
                     <MessageForm triggerReload={() => setReloadMessages(!reloadMessages)} />
+                </div>
+                <div id="blurBackground">
+                    <ChangePasswordForm></ChangePasswordForm>
                 </div>
             </div>
         </div>
