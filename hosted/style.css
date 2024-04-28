@@ -15,6 +15,7 @@ body {
     #55585b
     */
     overflow-y: hidden;
+    overscroll-behavior: none;
 }
 
 html::-webkit-scrollbar,
