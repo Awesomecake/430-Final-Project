@@ -43,7 +43,7 @@ const signup = async (req, res) => {
 
   try {
     const hash = await Account.generateHash(pass);
-    const newAccount = new Account({ username, password: hash, hasBoughtPremium: false});
+    const newAccount = new Account({ username, password: hash, hasBoughtPremium: false });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
     return res.json({ redirect: '/maker' });
@@ -73,8 +73,7 @@ const changePassword = async (req, res) => {
     account[0].password = await Account.generateHash(pass);
     await account[0].save();
     return res.json({ message: 'Password changed!' });
-  }
-  catch (err) {
+  } catch (err) {
     console.log(err);
     return res.status(400).json({ error: 'An error occurred.' });
   }
@@ -86,8 +85,8 @@ const setAccountChannel = async (req, res) => {
   }
 
   try {
-    const query = { _id: req.session.account._id};
-    const account = await Account.find(query)
+    const query = { _id: req.session.account._id };
+    const account = await Account.find(query);
 
     account[0].channel = req.body.channel;
     await account[0].save();

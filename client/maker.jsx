@@ -55,8 +55,6 @@ const MessageList = (props) => {
                 if (e.hasBoughtPremium) {
                     document.querySelector('#goPremium').style.display = 'none';
                     props.hasBoughtPremium();
-                    // document.querySelector('#rightAds').style.display = 'none';
-                    // document.querySelector('#leftAds').style.display = 'none';
                 }
 
                 setMessages(e.messages);
@@ -65,6 +63,28 @@ const MessageList = (props) => {
 
         loadMessagesFromServer();
     }, [props.reloadMessages]);
+
+    const editMessage = (e, id) => {
+        let target = e.target.parentElement.children[0];
+        let originalMessage = target.textContent;
+        target.contentEditable = "true";
+
+        target.focus();
+        target.onkeydown = (e) => {
+            if (e.keyCode === 13 && !e.shiftKey) {
+                e.preventDefault();
+                target.contentEditable = "false";
+                helper.sendPost(`/editMessage`, { id: id, message: target.textContent });
+                createRoot(target).render(<Markdown remarkPlugins={[remarkGfm]} class="messageMessage">{target.textContent}</Markdown>);
+            }
+            else if (e.keyCode === 27)
+            {
+                target.textContent = originalMessage;
+                target.blur();
+                target.contentEditable = "false";
+            }
+        };
+    };
 
     if (messages.length === 0) {
         return (
@@ -79,8 +99,11 @@ const MessageList = (props) => {
 
         return (
             <div key={message._id} class="content message">
-                <Markdown remarkPlugins={[remarkGfm]} class="messageMessage">{message.message}</Markdown>
+                <div>
+                    <Markdown remarkPlugins={[remarkGfm]} class="messageMessage">{message.message}</Markdown>
+                </div>
                 <button className="deleteMessage" onClick={() => helper.sendDelete(`/deleteMessage`, { id }, props.triggerReload)}>Delete</button>
+                <button className="editMessage" onClick={(e) => editMessage(e, id)}>Edit</button>
             </div>
         );
     });

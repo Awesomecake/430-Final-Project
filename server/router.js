@@ -4,6 +4,7 @@ const mid = require('./middleware');
 const router = (app) => {
   app.get('/getMessages', mid.requiresLogin, controllers.Message.getMessages);
   app.delete('/deleteMessage', mid.requiresLogin, controllers.Message.deleteMessage);
+  app.post('/editMessage', mid.requiresLogin, controllers.Message.editMessage);
 
   app.post('/setAccountChannel', mid.requiresLogin, controllers.Account.setAccountChannel);
   app.post('/changePassword', mid.requiresLogin, controllers.Account.changePassword);
