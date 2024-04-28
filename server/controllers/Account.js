@@ -43,7 +43,7 @@ const signup = async (req, res) => {
 
   try {
     const hash = await Account.generateHash(pass);
-    const newAccount = new Account({ username, password: hash });
+    const newAccount = new Account({ username, password: hash, hasBoughtPremium: false});
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
     return res.json({ redirect: '/maker' });
@@ -100,6 +100,19 @@ const setAccountChannel = async (req, res) => {
   }
 };
 
+const activatePremium = async (req, res) => {
+  try {
+    const account = await Account.find({ _id: req.session.account._id });
+    account[0].hasBoughtPremium = true;
+    await account[0].save();
+    req.session.account = Account.toAPI(account[0]);
+    return res.json({ message: 'Premium activated!' });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).json({ error: 'An error occurred.' });
+  }
+};
+
 module.exports = {
   loginPage,
   login,
@@ -107,4 +120,5 @@ module.exports = {
   signup,
   setAccountChannel,
   changePassword,
+  activatePremium,
 };

@@ -7,6 +7,7 @@ const router = (app) => {
 
   app.post('/setAccountChannel', mid.requiresLogin, controllers.Account.setAccountChannel);
   app.post('/changePassword', mid.requiresLogin, controllers.Account.changePassword);
+  app.post('/activatePremium', mid.requiresLogin, controllers.Account.activatePremium);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);

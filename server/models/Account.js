@@ -38,6 +38,10 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     default: '1',
   },
+  hasBoughtPremium: {
+    type: Boolean,
+    default: false,
+  },
   createdDate: {
     type: Date,
     default: Date.now,
@@ -48,7 +52,8 @@ const AccountSchema = new mongoose.Schema({
 AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   _id: doc._id,
-  channel: doc.channel
+  channel: doc.channel,
+  hasBoughtPremium: doc.hasBoughtPremium,
 });
 
 // Helper function to hash a password

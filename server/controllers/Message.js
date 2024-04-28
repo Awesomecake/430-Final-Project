@@ -1,3 +1,4 @@
+const { has } = require('underscore');
 const models = require('../models');
 
 const { Message } = models;
@@ -34,7 +35,7 @@ const getMessages = async (req, res) => {
     const query = { owner: req.session.account._id, channel: req.session.account.channel};
     const docs = await Message.find(query).select('channel message').lean().exec();
 
-    return res.json({ messages: docs, channel: req.session.account.channel });
+    return res.json({ messages: docs, channel: req.session.account.channel, hasBoughtPremium: req.session.account.hasBoughtPremium});
   } catch (err) {
     console.log(err);
     return res.status(500).json({ error: 'Error retrieving messages!' });

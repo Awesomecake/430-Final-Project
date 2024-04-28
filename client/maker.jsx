@@ -7,7 +7,6 @@ import remarkGfm from 'remark-gfm'
 
 const handleMessage = (action, onMessageAdded) => {
     // e.preventDefault();
-    helper.hideError();
 
     const channel = document.querySelector('#channelForm input[name="channel"]:checked').value;
     const message = document.querySelector('.textarea').value;
@@ -36,7 +35,7 @@ const MessageForm = (props) => {
             class='messageForm'
             onKeyDown={(e) => { if (e.keyCode == 13 && !e.shiftKey) { handleMessage(e.target.parentElement.action, props.triggerReload); e.preventDefault(); } }}
         >
-            <textarea class="textarea has-fixed-size has-text-white" rows="1" name="message" placeholder="Type your {} message here..." onChange={(e) => e.target.rows = calcHeight(e.target.value)}></textarea>
+            <textarea class="textarea has-fixed-size has-text-white" rows="1" name="message" placeholder="Type your general message here..." onChange={(e) => e.target.rows = calcHeight(e.target.value)}></textarea>
         </form>
     );
 }
@@ -52,6 +51,14 @@ const MessageList = (props) => {
                 currentChannel.checked = true;
                 document.querySelector('#displayChannelHeader').innerHTML = `<h1>Current Channel: ${currentChannel.id}</h1>`;
                 document.querySelector('textarea').placeholder = `Type your ${currentChannel.id} message here...`;
+                
+                if (e.hasBoughtPremium) {
+                    document.querySelector('#goPremium').style.display = 'none';
+                    props.hasBoughtPremium();
+                    // document.querySelector('#rightAds').style.display = 'none';
+                    // document.querySelector('#leftAds').style.display = 'none';
+                }
+
                 setMessages(e.messages);
             });
         };
@@ -109,7 +116,7 @@ const ChangePasswordForm = (props) => {
         const pass = document.querySelector('#pass').value;
         const pass2 = document.querySelector('#pass2').value;
 
-        helper.sendPost(e.target.action, { pass, pass2 }, (response) => {
+        helper.sendPost(e.target.action, { pass, pass2 }, () => {
             document.querySelector('#pass').value = '';
             document.querySelector('#pass2').value = '';
         }, changePasswordServerResponse);
@@ -141,12 +148,18 @@ const ChangePasswordForm = (props) => {
     );
 }
 
+const goPremium = (callback) => {
+    callback("hideAds");
+    helper.sendPost('/activatePremium');
+}
+
 const App = () => {
     const [reloadMessages, setReloadMessages] = useState(false);
+    const [hasBoughtPremium, setHasBoughtPremium] = useState("");
 
     return (
         <div id="app">
-            <div id="leftAds">
+            <div id="leftAds" class={hasBoughtPremium}>
                 <h1>Ads</h1>
                 <div></div>
                 <div></div>
@@ -159,7 +172,8 @@ const App = () => {
                         <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
                     </div>
                     <div>
-                        <button id="changePassword" onClick={() => document.querySelector('#blurBackground').style.display = 'block'}>Change Password</button>
+                        <button id="goPremium" class="formSubmit" onClick={(e) => {goPremium(setHasBoughtPremium); e.target.style.display = "none"}} >Go Premium</button>
+                        <button id="changePassword" onClick={() => {document.querySelector('#blurBackground').style.display = 'block'}}>Change Password</button>
                         <div class="navlink"><a href="/logout">Log out</a></div>
                     </div>
                 </div>
@@ -168,7 +182,7 @@ const App = () => {
                         <h1>Current Channel</h1>
                     </div>
                     <div id='messages'>
-                        <MessageList channel={"1"} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} />
+                        <MessageList channel={"1"} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} hasBoughtPremium={()=> setHasBoughtPremium("hideAds")}/>
                     </div>
                     <div id='makeMessage'>
                         <MessageForm triggerReload={() => setReloadMessages(!reloadMessages)} />
@@ -178,7 +192,7 @@ const App = () => {
                     </div>
                 </div>
             </div>
-            <div id="rightAds">
+            <div id="rightAds" class={hasBoughtPremium}>
                 <h1>Ads</h1>
                 <div></div>
                 <div></div>

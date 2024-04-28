@@ -3,7 +3,6 @@
    end in an error.*/
 const handleResponseMessage = (messageTarget, message) => {
     messageTarget.textContent = message;
-    //document.getElementById('domoMessage').classList.remove('hidden');
 };
 
 /* Sends post requests to the server using fetch. Will look for various
@@ -19,7 +18,6 @@ const sendPost = async (url, data, handler, outputTarget) => {
     });
 
     const result = await response.json();
-    document.getElementById('domoMessage').classList.add('hidden');
 
     if (result.redirect) {
         window.location = result.redirect;
@@ -48,7 +46,6 @@ const sendDelete = async (url, data, handler, outputTarget) => {
     });
 
     const result = await response.json();
-    document.getElementById('domoMessage').classList.add('hidden');
 
     if (result.error) {
         handleResponseMessage(outputTarget, result.error);
@@ -60,13 +57,8 @@ const sendDelete = async (url, data, handler, outputTarget) => {
     }
 }
 
-const hideError = () => {
-    document.getElementById('domoMessage').classList.add('hidden');
-}
-
 module.exports = {
     handleResponseMessage,
     sendPost,
-    sendDelete,
-    hideError
+    sendDelete
 }
