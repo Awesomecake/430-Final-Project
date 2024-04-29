@@ -34,20 +34,25 @@ body::-webkit-scrollbar {
     display: none !important;
 }
 
-#leftAds, #rightAds {
+#leftAds,
+#rightAds {
     width: 10%;
+    min-width: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
+
 }
 
-#leftAds h1, #rightAds h1{
+#leftAds h1,
+#rightAds h1 {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
 }
 
-#leftAds div, #rightAds div{
+#leftAds div,
+#rightAds div {
     margin-top: 20px;
     margin-bottom: 20px;
     width: 80%;
@@ -59,12 +64,15 @@ body::-webkit-scrollbar {
 
 #mainAppContent {
     flex-grow: 3;
+    width: 100%;
     margin: 0 auto;
     background-color: var(--supporting-bg-color);
     display: flex;
 }
 
-.content p, .content h1, .content h2{
+.content p,
+.content h1,
+.content h2 {
     margin: 10 !important;
 }
 
@@ -75,7 +83,7 @@ body::-webkit-scrollbar {
     justify-content: space-between;
 }
 
-#changePasswordForm{
+#changePasswordForm {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -85,13 +93,13 @@ body::-webkit-scrollbar {
     border-radius: 10px;
 }
 
-#changePSForm{
+#changePSForm {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#changePasswordServerResponse{
+#changePasswordServerResponse {
     text-align: center;
     color: red;
     font-size: 1.2em;
@@ -101,14 +109,14 @@ body::-webkit-scrollbar {
     margin-bottom: 10px;
 }
 
-#blurBackground{
+#blurBackground {
     display: none;
     overflow: hidden;
     position: absolute;
     width: 100%;
     height: 100%;
     top: 0;
-    left:0;
+    left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 100;
 }
@@ -137,8 +145,7 @@ body::-webkit-scrollbar {
 
 /* NavBar Styling */
 
-#introduction
-{
+#introduction {
     background-color: gray;
     display: flex;
     flex-direction: column;
@@ -150,18 +157,19 @@ body::-webkit-scrollbar {
     color: black;
 }
 
-#nav{
+#nav {
     padding: 30px;
     display: flex;
     justify-content: space-evenly;
     flex-direction: row-reverse;
 }
 
- .navlink {
+.navlink {
     font-size: 1.3em;
 }
 
-.formSubmit, #changePassword {
+.formSubmit,
+#changePassword {
     display: block;
     text-align: center;
     margin: 0 auto;
@@ -192,12 +200,12 @@ body::-webkit-scrollbar {
     transition: background-color 0.4s ease;
 }
 
-.navlink a:hover{
+.navlink a:hover {
     transition: background-color 0.8s ease;
     background-color: #66bdff;
 }
 
-#content{
+#content {
     background-color: var(--tertiary-bg-color);
     width: min-content;
     margin: auto;
@@ -206,11 +214,12 @@ body::-webkit-scrollbar {
     border-radius: 10px;
 }
 
-#content h1{
+#content h1 {
     margin: 20px;
 }
 
-#loginForm, #signupForm{
+#loginForm,
+#signupForm {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -237,8 +246,9 @@ body::-webkit-scrollbar {
 
 .textarea::placeholder {
     color: white !important;
-    opacity: 1; /* Firefox */
-  }
+    opacity: 1;
+    /* Firefox */
+}
 
 /* Current Channel Header Styling */
 
@@ -294,7 +304,9 @@ body::-webkit-scrollbar {
     box-shadow: 0px 0px 1px 1px #55acee;
 }
 
-#errorMessage, #loginOutput, #signupOutput {
+#errorMessage,
+#loginOutput,
+#signupOutput {
     color: red;
     font-style: italic;
 }
@@ -336,6 +348,7 @@ body::-webkit-scrollbar {
 .message:hover {
     background-color: lightgray;
 }
+
 /* 
 .message button {
     position: absolute;
@@ -343,12 +356,12 @@ body::-webkit-scrollbar {
     right: 10px;
 } */
 
-.message button{
+.message button {
     float: right;
     margin-left: 10px;
 }
 
-.message p{
+.message p {
     white-space-collapse: preserve;
 }
 
@@ -395,23 +408,13 @@ h3.emptyMessage {
     flex-direction: column;
 }
 
-@media screen and (max-width: 600px) {
-    #channelSelect {
-        display: none;
-    }
-
-    #displayChannelHeader h1 {
-        font-size: 1.8em;
-    }
-}
-
-#channelSelect div{
+#channelSelect div {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#channelSelect h1{
+#channelSelect h1 {
     font-weight: bold;
 }
 
@@ -439,6 +442,48 @@ h3.emptyMessage {
     pointer-events: none;
 }
 
-#channelSelect a{
+#channelSelect a {
     justify-self: flex-start;
+}
+
+
+@media screen and (max-width: 900px) {
+    #displayChannelHeader h1 {
+        font-size: 1.8em;
+    }
+
+    #app {
+        flex-direction: column;
+    }
+
+    #rightAds {
+        display: none;
+    }
+
+    #leftAds,
+    #rightAds {
+        flex-direction: row;
+        justify-content: space-around;
+        width: 100%;
+        height: 10%;
+        padding: 5px;
+    }
+
+    #leftAds h1,
+    #rightAds h1 {
+        margin-right: 10px;
+    }
+
+    #leftAds div,
+    #rightAds div {
+        width: 40%;
+        height: 100%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #channelSelect {
+        display: none;
+    }
+
 }
