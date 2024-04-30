@@ -78,6 +78,7 @@ body::-webkit-scrollbar {
 }
 
 #contentMessages {
+    max-width: 90%;
     display: flex;
     flex-direction: column;
     flex-grow: 3;
@@ -326,8 +327,6 @@ body::-webkit-scrollbar {
 /* List of Messages Styling */
 #messages {
     padding: 20px 0px;
-    width: 100%;
-    max-width: 100vw;
     border-radius: 4px;
     overflow-y: auto;
     flex-grow: 3;
@@ -402,12 +401,14 @@ h3.emptyMessage {
     top: 50px;
     bottom: 0px;
     color: white;
+    max-width: 200px;
 
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     flex-direction: column;
 }
+
 
 #channelSelect div {
     display: flex;
@@ -448,6 +449,13 @@ h3.emptyMessage {
 }
 
 
+#channelForm label{
+    cursor: pointer;
+    max-width: 150px;
+    word-wrap: break-word;
+}
+
+
 @media screen and (max-width: 900px) {
     #displayChannelHeader h1 {
         font-size: 1.8em;
@@ -482,6 +490,10 @@ h3.emptyMessage {
 @media screen and (max-width: 600px) {
     #channelSelect {
         display: none;
+    }
+
+    #contentMessages {
+        max-width: 100%;
     }
 
 }

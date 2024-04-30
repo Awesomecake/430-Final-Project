@@ -36,6 +36,7 @@ const sendPost = async (url, data, handler, outputTarget) => {
     }
 };
 
+// Sends a delete request to the server using fetch. 
 const sendDelete = async (url, data, handler, outputTarget) => {
     const response = await fetch(url, {
         method: 'DELETE',

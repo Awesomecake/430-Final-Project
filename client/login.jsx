@@ -2,6 +2,7 @@ const helper = require('./helper.js');
 const React = require('react');
 const { createRoot } = require('react-dom/client');
 
+// handles the logic to send a login request to the server
 const handleLogin = (e) => {
     e.preventDefault();
 
@@ -17,6 +18,7 @@ const handleLogin = (e) => {
     return false;
 }
 
+// handles the logic to send a signup request to the server
 const handleSignup = (e) => {
     e.preventDefault();
     let signupOutput = document.querySelector("#signupOutput");
@@ -25,11 +27,13 @@ const handleSignup = (e) => {
     const pass = e.target.querySelector("#pass").value;
     const pass2 = e.target.querySelector("#pass2").value;
 
+    // checks if all fields are filled out
     if (!username || !pass || !pass2) {
         helper.handleResponseMessage(signupOutput, 'All fields are required!');
         return false;
     }
 
+    // checks if passwords match
     if (pass !== pass2) {
         helper.handleResponseMessage(signupOutput, 'Passwords do not match!');
         return false;
@@ -40,6 +44,7 @@ const handleSignup = (e) => {
     return false;
 }
 
+// creates the login form
 const LoginWindow = (props) => {
     return (
         <form id="loginForm"
@@ -62,6 +67,7 @@ const LoginWindow = (props) => {
     );
 }
 
+// creates the signup form
 const SignupWindow = (props) => {
     return (
         <form
@@ -88,6 +94,7 @@ const SignupWindow = (props) => {
     );
 }
 
+// initializes the login page
 const init = () => {
     const loginButton = document.getElementById('loginButton');
     const signupButton = document.getElementById('signupButton');

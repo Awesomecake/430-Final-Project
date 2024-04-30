@@ -4,7 +4,9 @@ const { Message } = models;
 
 const messageTrackerPage = async (req, res) => res.render('app');
 
+// attempts to create a new message in the database
 const makeMessage = async (req, res) => {
+  // checks if channel and message data is in the request
   if (!req.body.channel || !req.body.message) {
     return res.status(400).json({ error: 'Channel and Message are required.' });
   }
@@ -15,6 +17,7 @@ const makeMessage = async (req, res) => {
     owner: req.session.account._id,
   };
 
+  // attempts to create the new message
   try {
     const newMessage = new Message(messageData);
     await newMessage.save();
@@ -29,6 +32,7 @@ const makeMessage = async (req, res) => {
   }
 };
 
+// retrieves messages from the database
 const getMessages = async (req, res) => {
   try {
     const query = { owner: req.session.account._id, channel: req.session.account.channel };
@@ -45,11 +49,14 @@ const getMessages = async (req, res) => {
   }
 };
 
+// attempts to delete a message from the database
 const deleteMessage = async (req, res) => {
+  // checks if message id is in the request
   if (!req.body.id) {
     return res.status(400).json({ error: 'An ID is required to delete a message!' });
   }
 
+  // attempts to delete the message
   try {
     await Message.deleteOne({ _id: req.body.id });
     return res.status(200).json({ message: 'Message deleted!' });
@@ -59,7 +66,9 @@ const deleteMessage = async (req, res) => {
   }
 };
 
+// attempts to edit a message in the database
 const editMessage = async (req, res) => {
+  // checks if message id and message data are in the request
   if (!req.body.id || !req.body.message) {
     return res.status(400).json({ error: 'An ID and message are required to edit a message!' });
   }

@@ -38,6 +38,10 @@ const AccountSchema = new mongoose.Schema({
     type: String,
     default: '1',
   },
+  channelNames: {
+    type: Array,
+    default: ['1','2','3']
+  },
   hasBoughtPremium: {
     type: Boolean,
     default: false,
@@ -53,6 +57,7 @@ AccountSchema.statics.toAPI = (doc) => ({
   username: doc.username,
   _id: doc._id,
   channel: doc.channel,
+  channelNames: doc.channelNames,
   hasBoughtPremium: doc.hasBoughtPremium,
 });
 
