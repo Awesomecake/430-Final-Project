@@ -149,7 +149,7 @@ const setChannelNames = async (req, res) => {
     console.log(err);
     return res.status(400).json({ error: 'An error occurred.' });
   }
-}
+};
 
 module.exports = {
   loginPage,
@@ -160,5 +160,5 @@ module.exports = {
   changePassword,
   activatePremium,
   getChannels,
-  setChannelNames
+  setChannelNames,
 };

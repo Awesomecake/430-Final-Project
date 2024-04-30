@@ -40,7 +40,7 @@ const AccountSchema = new mongoose.Schema({
   },
   channelNames: {
     type: Array,
-    default: ['1','2','3']
+    default: ['General', 'Random', 'Other'],
   },
   hasBoughtPremium: {
     type: Boolean,

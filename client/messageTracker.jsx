@@ -136,9 +136,12 @@ const MessageList = (props) => {
 
 // creates the form that is used to change the channel
 const ChannelForm = (props) => {
+
+    // allows the user to edit the channel name
     const updateChannel = (e) => {
         let channelID = e.target.value;
 
+        // if the user selects the same channel twice, allow them to edit the channel name
         if(e.target.parentElement.prevSelect === e.target.value) {
             let target = e.target.parentElement.querySelector(`label[for="${e.target.id}"]`);
 
@@ -147,7 +150,7 @@ const ChannelForm = (props) => {
     
             target.focus();
     
-            // sets up event listeners for ending editing
+            // if the user presses enter, the channel name will be updated
             target.onkeydown = (e) => {
                 if (e.keyCode === 13 && !e.shiftKey) {
                     let newMessage = target.textContent;
@@ -157,6 +160,7 @@ const ChannelForm = (props) => {
                     helper.sendPost(`/setChannelNames`, { channelNames: props.channelNames },props.triggerReload);
                     target.textContent = newMessage;
                     }
+                // if the user presses escape, the channel name will revert to its original name
                 else if (e.keyCode === 27) { target.blur(); }
             };
     
@@ -251,6 +255,7 @@ const AdsPanel = (props) => {
     );
 }
 
+// constructs the side panel with the primary page control buttons
 const AppOptionsPanel = (props) => {
     return (
         <div id="appOptionsPanel">
