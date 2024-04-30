@@ -24,7 +24,7 @@ const login = (req, res) => {
 
     req.session.account = Account.toAPI(account);
 
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/messageTrackerPage' });
   });
 };
 
@@ -46,7 +46,7 @@ const signup = async (req, res) => {
     const newAccount = new Account({ username, password: hash, hasBoughtPremium: false });
     await newAccount.save();
     req.session.account = Account.toAPI(newAccount);
-    return res.json({ redirect: '/maker' });
+    return res.json({ redirect: '/messageTrackerPage' });
   } catch (err) {
     console.log(err);
     if (err.code === 11000) {

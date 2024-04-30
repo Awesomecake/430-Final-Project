@@ -2,7 +2,7 @@ const models = require('../models');
 
 const { Message } = models;
 
-const makerPage = async (req, res) => res.render('app');
+const messageTrackerPage = async (req, res) => res.render('app');
 
 const makeMessage = async (req, res) => {
   if (!req.body.channel || !req.body.message) {
@@ -82,7 +82,7 @@ const editMessage = async (req, res) => {
 };
 
 module.exports = {
-  makerPage,
+  messageTrackerPage,
   getMessages,
   makeMessage,
   deleteMessage,

@@ -19,22 +19,23 @@ const handleLogin = (e) => {
 
 const handleSignup = (e) => {
     e.preventDefault();
+    let signupOutput = document.querySelector("#signupOutput");
 
     const username = e.target.querySelector("#user").value;
     const pass = e.target.querySelector("#pass").value;
     const pass2 = e.target.querySelector("#pass2").value;
 
     if (!username || !pass || !pass2) {
-        helper.handleResponseMessage(document.querySelector("#signupOutput"), 'All fields are required!');
+        helper.handleResponseMessage(signupOutput, 'All fields are required!');
         return false;
     }
 
     if (pass !== pass2) {
-        helper.handleResponseMessage(document.querySelector("#signupOutput"), 'Passwords do not match!');
+        helper.handleResponseMessage(signupOutput, 'Passwords do not match!');
         return false;
     }
 
-    helper.sendPost(e.target.action, { username, pass, pass2 });
+    helper.sendPost(e.target.action, { username, pass, pass2 }, {}, signupOutput);
 
     return false;
 }

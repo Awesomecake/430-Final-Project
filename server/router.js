@@ -7,8 +7,8 @@ const router = (app) => {
   app.post('/editMessage', mid.requiresLogin, controllers.Message.editMessage);
 
   app.post('/setAccountChannel', mid.requiresLogin, controllers.Account.setAccountChannel);
-  app.post('/changePassword', mid.requiresLogin, controllers.Account.changePassword);
-  app.post('/activatePremium', mid.requiresLogin, controllers.Account.activatePremium);
+  app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
+  app.post('/activatePremium', mid.requiresSecure, mid.requiresLogin, controllers.Account.activatePremium);
 
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
@@ -17,8 +17,8 @@ const router = (app) => {
 
   app.get('/logout', mid.requiresLogin, controllers.Account.logout);
 
-  app.get('/maker', mid.requiresLogin, controllers.Message.makerPage);
-  app.post('/maker', mid.requiresLogin, controllers.Message.makeMessage);
+  app.get('/messageTrackerPage', mid.requiresLogin, controllers.Message.messageTrackerPage);
+  app.post('/makeMessage', mid.requiresLogin, controllers.Message.makeMessage);
 
   app.get('/', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
 

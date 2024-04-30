@@ -21,21 +21,20 @@ const handleMessage = (action, onMessageAdded) => {
 
 const MessageForm = (props) => {
     // Dealing with Textarea Height
-    function calcHeight(value) {
-        let numberOfLineBreaks = (value.match(/\n/g) || []).length + 1;
-        return numberOfLineBreaks.toString();
+    function calcBulmaRows(value) {
+        return ((value.match(/\n/g) || []).length + 1).toString();
     }
 
     return (
         <form id="messageForm"
             onSubmit={(e) => handleMessage(e.target.action, props.triggerReload)}
             name='messageForm'
-            action="/maker"
+            action="/makeMessage"
             method="POST"
             class='messageForm'
             onKeyDown={(e) => { if (e.keyCode == 13 && !e.shiftKey) { handleMessage(e.target.parentElement.action, props.triggerReload); e.preventDefault(); } }}
         >
-            <textarea class="textarea has-fixed-size has-text-white" rows="1" name="message" placeholder="Type your general message here..." onChange={(e) => e.target.rows = calcHeight(e.target.value)}></textarea>
+            <textarea class="textarea has-fixed-size has-text-white" rows="1" name="message" placeholder="Type your general message here..." onChange={(e) => e.target.rows = calcBulmaRows(e.target.value)}></textarea>
         </form>
     );
 }
@@ -51,10 +50,10 @@ const MessageList = (props) => {
                 currentChannel.checked = true;
                 document.querySelector('#displayChannelHeader').innerHTML = `<h1>Current Channel: ${currentChannel.id}</h1>`;
                 document.querySelector('textarea').placeholder = `Type your ${currentChannel.id} message here...`;
-                
-                if (e.hasBoughtPremium) {
-                    document.querySelector('#goPremium').style.display = 'none';
-                    props.hasBoughtPremium();
+
+                if (!e.hasBoughtPremium) {
+                    props.hasNotBoughtPremium();
+                    document.querySelector('#goPremium').style.display = 'block';
                 }
 
                 setMessages(e.messages);
@@ -72,18 +71,18 @@ const MessageList = (props) => {
         target.focus();
         target.onkeydown = (e) => {
             if (e.keyCode === 13 && !e.shiftKey) {
-                e.preventDefault();
-                target.contentEditable = "false";
-                helper.sendPost(`/editMessage`, { id: id, message: target.textContent });
-                createRoot(target).render(<Markdown remarkPlugins={[remarkGfm]} class="messageMessage">{target.textContent}</Markdown>);
-            }
-            else if (e.keyCode === 27)
-            {
-                target.textContent = originalMessage;
+                let newMessage = target.textContent;
                 target.blur();
-                target.contentEditable = "false";
+                helper.sendPost(`/editMessage`, { id: id, message: newMessage });
+                createRoot(target).render(<Markdown remarkPlugins={[remarkGfm]} class="messageMessage">{newMessage}</Markdown>);
             }
+            else if (e.keyCode === 27) { target.blur(); }
         };
+
+        target.onblur = () => {
+            target.textContent = originalMessage;
+            target.contentEditable = "false";
+        }
     };
 
     if (messages.length === 0) {
@@ -171,6 +170,17 @@ const ChangePasswordForm = (props) => {
     );
 }
 
+const AdsPanel = (props) => {
+    return (
+        <div id="adsPanel" class={props.class}>
+            <h1>Ads</h1>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    );
+}
+
 const goPremium = (callback) => {
     callback("hideAds");
     helper.sendPost('/activatePremium');
@@ -178,16 +188,11 @@ const goPremium = (callback) => {
 
 const App = () => {
     const [reloadMessages, setReloadMessages] = useState(false);
-    const [hasBoughtPremium, setHasBoughtPremium] = useState("");
+    const [hasBoughtPremium, setHasBoughtPremium] = useState("hideAds");
 
     return (
         <div id="app">
-            <div id="leftAds" class={hasBoughtPremium}>
-                <h1>Ads</h1>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+            <AdsPanel class={hasBoughtPremium}/>
             <div id="mainAppContent">
                 <div id="channelSelect">
                     <div>
@@ -195,8 +200,8 @@ const App = () => {
                         <ChannelForm triggerReload={() => setReloadMessages(!reloadMessages)} />
                     </div>
                     <div>
-                        <button id="goPremium" class="formSubmit" onClick={(e) => {goPremium(setHasBoughtPremium); e.target.style.display = "none"}} >Go Premium</button>
-                        <button id="changePassword" onClick={() => {document.querySelector('#blurBackground').style.display = 'block'}}>Change Password</button>
+                        <button id="goPremium" class="formSubmit" onClick={(e) => { goPremium(setHasBoughtPremium); e.target.style.display = "none" }} >Go Premium</button>
+                        <button id="changePassword" onClick={() => { document.querySelector('#blurBackground').style.display = 'block' }}>Change Password</button>
                         <div class="navlink"><a href="/logout">Log out</a></div>
                     </div>
                 </div>
@@ -205,7 +210,7 @@ const App = () => {
                         <h1>Current Channel</h1>
                     </div>
                     <div id='messages'>
-                        <MessageList channel={"1"} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} hasBoughtPremium={()=> setHasBoughtPremium("hideAds")}/>
+                        <MessageList channel={"1"} messages={[]} reloadMessages={reloadMessages} triggerReload={() => setReloadMessages(!reloadMessages)} hasNotBoughtPremium={() => setHasBoughtPremium("")} />
                     </div>
                     <div id='makeMessage'>
                         <MessageForm triggerReload={() => setReloadMessages(!reloadMessages)} />
@@ -215,12 +220,7 @@ const App = () => {
                     </div>
                 </div>
             </div>
-            <div id="rightAds" class={hasBoughtPremium}>
-                <h1>Ads</h1>
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
+            <AdsPanel class={hasBoughtPremium}/>
         </div>
     );
 };
